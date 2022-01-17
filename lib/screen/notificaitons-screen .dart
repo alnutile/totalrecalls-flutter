@@ -48,7 +48,6 @@ class NotificationsState extends State<NotificationsScreen> {
                 itemCount: snapShot.data?.length,
                 itemBuilder: (context, index) {
                   var item = snapShot.data![index];
-
                   return ListTile(
                     title: Text(item.title),
                   );
