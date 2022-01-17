@@ -37,6 +37,10 @@ class Auth extends ChangeNotifier {
     await storage.write(key: 'auth', value: token);
   }
 
+  Future getToken() async {
+    return await storage.read(key: 'auth');
+  }
+
   Future attempt(String token) async {
     try {
       Dio.Response response = await dio().get(
@@ -62,7 +66,6 @@ class Auth extends ChangeNotifier {
 
   void logout() {
     _authenticated = false;
-    log("HERE");
 
     notifyListeners();
   }

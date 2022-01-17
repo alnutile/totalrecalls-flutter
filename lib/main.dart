@@ -64,7 +64,6 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Consumer<Auth>(
           builder: (context, auth, child) {
             if (auth.authenticated) {
-              log("HERE HOME");
               return Text("You are logged in");
             } else {
               return Text("You are NOT logged in");

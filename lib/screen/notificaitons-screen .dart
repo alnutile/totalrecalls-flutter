@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import '../dio.dart';
 import 'package:totalrecalls/models/recallNotification.dart';
 
@@ -16,9 +15,18 @@ class NotificationsScreen extends StatefulWidget {
 
 class NotificationsState extends State<NotificationsScreen> {
   Future<List<RecallNotification>> getNotifications() async {
-    Dio.Response response = await dio().get("mynotifications");
+    Dio.Response response = await dio().get(
+      "mynotifications",
+      options: Dio.Options(
+        headers: {'auth': true},
+      ),
+    );
 
-    List recallNotifications = json.decode(response.toString());
+    var data = json.decode(response.data.toString())['data']['notifications'];
+
+    log(data.toString());
+
+    List recallNotifications = data;
 
     return recallNotifications
         .map((notice) => RecallNotification.fromJson(notice))
