@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:totalrecalls/providers/auth.dart';
 import 'package:totalrecalls/widgets/nav-drawer.dart';
@@ -37,6 +40,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final storage = new FlutterSecureStorage();
+
+  void _attemptAuthentication() async {
+    final key = await storage.read(key: 'auth');
+    Provider.of<Auth>(context, listen: false).attempt(key!);
+  }
+
+  @override
+  void initState() {
+    _attemptAuthentication();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Consumer<Auth>(
           builder: (context, auth, child) {
-            if (auth.autheticated) {
+            if (auth.authenticated) {
+              log("HERE HOME");
               return Text("You are logged in");
             } else {
               return Text("You are NOT logged in");

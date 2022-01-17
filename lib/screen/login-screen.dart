@@ -24,6 +24,7 @@ class LoginState extends State<LoginScreen> {
     Navigator.pop(context);
   }
 
+  bool _isObscure = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,8 +48,22 @@ class LoginState extends State<LoginScreen> {
                       },
                     ),
                     TextFormField(
+                      obscureText: _isObscure,
                       initialValue: "fZFw_3z*oXYNwCcPT_qs",
-                      decoration: InputDecoration(labelText: "Password"),
+                      decoration: InputDecoration(
+                          labelText: "Password",
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isObscure
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isObscure = !_isObscure;
+                              });
+                            },
+                          )),
                       onSaved: (value) {
                         _password = value!;
                       },

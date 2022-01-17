@@ -12,9 +12,12 @@ class NavDrawer extends StatelessWidget {
     return Drawer(
       child: Consumer<Auth>(
         builder: (context, auth, child) {
-          if (auth.autheticated) {
+          if (auth.authenticated) {
             return ListView(
               children: [
+                ListTile(
+                  title: Text("Welcome " + auth.user.name),
+                ),
                 ListTile(
                   title: Text("Home"),
                   onTap: () {

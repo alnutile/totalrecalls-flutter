@@ -1,5 +1,11 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../dio.dart';
+import 'package:totalrecalls/models/recallNotification.dart';
 
 class NotificationsScreen extends StatefulWidget {
   @override
@@ -9,6 +15,16 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class NotificationsState extends State<NotificationsScreen> {
+  Future<List<RecallNotification>> getNotifications() async {
+    Dio.Response response = await dio().get("mynotifications");
+
+    List recallNotifications = json.decode(response.toString());
+
+    return recallNotifications
+        .map((notice) => RecallNotification.fromJson(notice))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +32,28 @@ class NotificationsState extends State<NotificationsScreen> {
         title: Text("Read Notififications"),
       ),
       body: Center(
-        child: Text("Your Notifications"),
+        child: FutureBuilder<List<RecallNotification>>(
+          future: getNotifications(),
+          builder: (context, snapShot) {
+            if (snapShot.hasData) {
+              return ListView.builder(
+                itemCount: snapShot.data?.length,
+                itemBuilder: (context, index) {
+                  var item = snapShot.data![index];
+
+                  return ListTile(
+                    title: Text(item.title),
+                  );
+                },
+              );
+            } else if (snapShot.hasError) {
+              log(snapShot.error.toString());
+              return Text("Failed to get Notifications");
+            }
+
+            return CircularProgressIndicator();
+          },
+        ),
       ),
     );
   }
