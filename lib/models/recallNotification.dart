@@ -1,13 +1,14 @@
 class RecallNotification {
   int id;
   String title;
+  String body;
+  int read;
+  int watch;
 
-  RecallNotification({required this.id, required this.title});
+  RecallNotification(this.id, this.title, this.body, this.read, this.watch);
 
   factory RecallNotification.fromJson(Map<String, dynamic> json) {
     return RecallNotification(
-      id: json['id'],
-      title: json['title'],
-    );
+        json['id'], json['title'], json['body'], json['read'], json['watch']);
   }
 }

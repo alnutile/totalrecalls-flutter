@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter/material.dart';
@@ -14,6 +15,52 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class NotificationsState extends State<NotificationsScreen> {
+  String watchText(int watch) {
+    if (watch == 1) {
+      return "Un-Watch";
+    }
+    return "Watch";
+  }
+
+  String getTitle(String title) {
+    var max = 75;
+    if (title.length < max) {
+      return title;
+    }
+
+    return title.replaceRange(max, title.length, '...');
+  }
+
+  markRead(int recallId) async {
+    log(recallId.toString());
+    Dio.Response response = await dio().post("mynotifications/read",
+        options: Dio.Options(
+          headers: {'auth': true},
+        ),
+        data: [recallId]);
+
+    try {
+      setState(() {});
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  watch(int recallId) async {
+    log(recallId.toString());
+    Dio.Response response = await dio().post("mynotifications/watch",
+        options: Dio.Options(
+          headers: {'auth': true},
+        ),
+        data: [recallId]);
+
+    try {
+      setState(() {});
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
   Future<List<RecallNotification>> getNotifications() async {
     Dio.Response response = await dio().get(
       "mynotifications",
@@ -23,8 +70,6 @@ class NotificationsState extends State<NotificationsScreen> {
     );
 
     var data = json.decode(response.data.toString())['data']['notifications'];
-
-    log(data.toString());
 
     List recallNotifications = data;
 
@@ -48,8 +93,36 @@ class NotificationsState extends State<NotificationsScreen> {
                 itemCount: snapShot.data?.length,
                 itemBuilder: (context, index) {
                   var item = snapShot.data![index];
-                  return ListTile(
-                    title: Text(item.title),
+                  return Center(
+                    child: Card(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            title: Text(getTitle(item.title)),
+                            subtitle: Text(item.body),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              TextButton(
+                                child: const Text('Mark Read'),
+                                onPressed: () {
+                                  markRead(item.id);
+                                },
+                              ),
+                              TextButton(
+                                child: Text(watchText(item.watch)),
+                                onPressed: () {
+                                  watch(item.id);
+                                },
+                              ),
+                              const SizedBox(width: 8),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 },
               );
