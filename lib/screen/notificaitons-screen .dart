@@ -83,7 +83,7 @@ class NotificationsState extends State<NotificationsScreen> {
       appBar: AppBar(
         title: Text("Read Notififications"),
       ),
-      body: Center(
+      body: Container(
         child: FutureBuilder<List<RecallNotification>>(
           future: getNotifications(),
           builder: (context, snapShot) {

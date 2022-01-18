@@ -16,6 +16,10 @@ class AddSubscriptionScreen extends StatefulWidget {
 }
 
 class AddSubscriptionState extends State<AddSubscriptionScreen> {
+  TextEditingController editingController = TextEditingController();
+
+  String search = "";
+
   subscribe(int subId) async {
     Dio.Response response = await dio().post("mysubscriptions",
         options: Dio.Options(
@@ -30,9 +34,19 @@ class AddSubscriptionState extends State<AddSubscriptionScreen> {
     }
   }
 
+  String searchString() {
+    if (search == "") {
+      return "";
+    }
+
+    return "?search=" + search;
+  }
+
   Future<List<Subscribable>> getSubscibables() async {
+    log("subscribables" + searchString());
+
     Dio.Response response = await dio().get(
-      "subscribables",
+      "subscribables" + searchString(),
       options: Dio.Options(
         headers: {'auth': true},
       ),
@@ -53,51 +67,86 @@ class AddSubscriptionState extends State<AddSubscriptionScreen> {
       appBar: AppBar(
         title: Text("Subscribe to Recall Topics"),
       ),
-      body: Center(
-        child: FutureBuilder<List<Subscribable>>(
-          future: getSubscibables(),
-          builder: (context, snapShot) {
-            if (snapShot.hasData) {
-              return ListView.builder(
-                itemCount: snapShot.data?.length,
-                itemBuilder: (context, index) {
-                  var item = snapShot.data![index];
-                  return Center(
-                    child: Card(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            title: Text(item.name),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              TextButton(
-                                child: Text("Subscribe"),
-                                onPressed: () {
-                                  subscribe(item.id);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                            Text('Added to Subscriptions')),
-                                  );
-                                },
-                              ),
-                              const SizedBox(width: 8),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                onChanged: (value) {
+                  if (value.length > 2) {
+                    search = value;
+                    log("refresh subscribables");
+                    getSubscibables();
+                    setState(() {});
+                  }
                 },
-              );
-            } else if (snapShot.hasError) {
-              return Text("Failed to get Notifications");
-            }
-            return CircularProgressIndicator();
-          },
+                controller: editingController,
+                decoration: InputDecoration(
+                  labelText: "Search",
+                  hintText: "Search",
+                  prefixIcon: Icon(Icons.search),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      search = "";
+                      editingController.clear();
+                      getSubscibables();
+                      setState(() {});
+                    },
+                    icon: Icon(Icons.clear),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: FutureBuilder<List<Subscribable>>(
+                future: getSubscibables(),
+                builder: (context, snapShot) {
+                  if (snapShot.hasData) {
+                    return ListView.builder(
+                      itemCount: snapShot.data?.length,
+                      itemBuilder: (context, index) {
+                        var item = snapShot.data![index];
+                        return Center(
+                          child: Card(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ListTile(
+                                  title: Text(item.name),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    TextButton(
+                                      child: Text("Subscribe"),
+                                      onPressed: () {
+                                        subscribe(item.id);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'Added to Subscriptions')),
+                                        );
+                                      },
+                                    ),
+                                    const SizedBox(width: 8),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else if (snapShot.hasError) {
+                    return Text("Failed to get Subscribable Topics");
+                  }
+                  return CircularProgressIndicator();
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
