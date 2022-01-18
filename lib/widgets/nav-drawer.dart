@@ -5,6 +5,7 @@ import 'package:totalrecalls/providers/auth.dart';
 import 'package:totalrecalls/screen/login-screen.dart';
 import 'package:totalrecalls/screen/notificaitons-screen%20.dart';
 import 'package:totalrecalls/screen/subscribe-screen.dart';
+import 'package:totalrecalls/screen/add-subscription-screen.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -44,6 +45,15 @@ class NavDrawer extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => SubscribeScreen()));
+                  },
+                ),
+                ListTile(
+                  title: Text("Recall Topics Subscribe Here!"),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddSubscriptionScreen()));
                   },
                 ),
                 ListTile(

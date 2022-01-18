@@ -32,7 +32,6 @@ class NotificationsState extends State<NotificationsScreen> {
   }
 
   markRead(int recallId) async {
-    log(recallId.toString());
     Dio.Response response = await dio().post("mynotifications/read",
         options: Dio.Options(
           headers: {'auth': true},
