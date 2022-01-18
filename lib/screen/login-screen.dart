@@ -40,7 +40,6 @@ class LoginState extends State<LoginScreen> {
                 child: Column(
                   children: [
                     TextFormField(
-                      initialValue: "info@sundancesolutions.io",
                       decoration: InputDecoration(
                           labelText: "Email", hintText: "you@somewhere.com"),
                       onSaved: (value) {
@@ -49,7 +48,6 @@ class LoginState extends State<LoginScreen> {
                     ),
                     TextFormField(
                       obscureText: _isObscure,
-                      initialValue: "fZFw_3z*oXYNwCcPT_qs",
                       decoration: InputDecoration(
                           labelText: "Password",
                           suffixIcon: IconButton(
