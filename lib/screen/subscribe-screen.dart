@@ -75,6 +75,11 @@ class SubscribeState extends State<SubscribeScreen> {
                                   child: const Text("Unsubscribe"),
                                   onPressed: () {
                                     unsubscribe(item.id);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Unsubscribed! You can subscribe again anytime.')),
+                                    );
                                   },
                                 )
                               ],

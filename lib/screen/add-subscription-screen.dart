@@ -77,6 +77,11 @@ class AddSubscriptionState extends State<AddSubscriptionScreen> {
                                 child: Text("Subscribe"),
                                 onPressed: () {
                                   subscribe(item.id);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text('Added to Subscriptions')),
+                                  );
                                 },
                               ),
                               const SizedBox(width: 8),

@@ -108,12 +108,22 @@ class NotificationsState extends State<NotificationsScreen> {
                                 child: const Text('Mark Read'),
                                 onPressed: () {
                                   markRead(item.id);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'You can find there later if needed.')),
+                                  );
                                 },
                               ),
                               TextButton(
                                 child: Text(watchText(item.watch)),
                                 onPressed: () {
                                   watch(item.id);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'These items are in your Watched area')),
+                                  );
                                 },
                               ),
                               const SizedBox(width: 8),
