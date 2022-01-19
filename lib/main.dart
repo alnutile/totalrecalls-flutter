@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:totalrecalls/providers/auth.dart';
 import 'package:totalrecalls/widgets/nav-drawer.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -64,9 +65,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Consumer<Auth>(
           builder: (context, auth, child) {
             if (auth.authenticated) {
-              return Text("You are logged in");
+              return WebView(
+                initialUrl: "https://totalrecalls.io",
+              );
             } else {
-              return Text("You are NOT logged in");
+              return WebView(
+                initialUrl: "https://totalrecalls.io",
+              );
             }
           },
         ),

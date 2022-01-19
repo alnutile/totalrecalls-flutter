@@ -18,6 +18,16 @@ class AddSubscriptionScreen extends StatefulWidget {
 class AddSubscriptionState extends State<AddSubscriptionScreen> {
   TextEditingController editingController = TextEditingController();
 
+  List topics = [
+    "city",
+    "country",
+    "company",
+    "level",
+    "state",
+  ];
+
+  String filter = "";
+
   String search = "";
 
   subscribe(int subId) async {
@@ -35,11 +45,21 @@ class AddSubscriptionState extends State<AddSubscriptionScreen> {
   }
 
   String searchString() {
-    if (search == "") {
+    List searchFilters = [];
+
+    if (filter != "") {
+      searchFilters.add("type=" + filter);
+    }
+
+    if (search != "") {
+      searchFilters.add("search=" + search);
+    }
+
+    if (searchFilters.isEmpty) {
       return "";
     }
 
-    return "?search=" + search;
+    return "?" + searchFilters.join("&");
   }
 
   Future<List<Subscribable>> getSubscibables() async {
@@ -61,6 +81,32 @@ class AddSubscriptionState extends State<AddSubscriptionScreen> {
         .toList();
   }
 
+  var _isSelected = false;
+
+  _buildChip(String label, Color color) {
+    return InputChip(
+      labelPadding: EdgeInsets.all(2.0),
+      label: Text(
+        label.toUpperCase(),
+        style: TextStyle(color: Colors.white, fontSize: 12),
+      ),
+      selected: filter == label,
+      onSelected: (bool selected) {
+        if (filter == label) {
+          filter = "";
+        } else {
+          filter = label;
+        }
+        getSubscibables();
+        setState(() {});
+      },
+      backgroundColor: color,
+      elevation: 6.0,
+      shadowColor: Colors.grey[60],
+      padding: EdgeInsets.all(8.0),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +122,6 @@ class AddSubscriptionState extends State<AddSubscriptionScreen> {
                 onChanged: (value) {
                   if (value.length > 2) {
                     search = value;
-                    log("refresh subscribables");
                     getSubscibables();
                     setState(() {});
                   }
@@ -97,6 +142,13 @@ class AddSubscriptionState extends State<AddSubscriptionScreen> {
                   ),
                 ),
               ),
+            ),
+            Container(
+              child: Wrap(spacing: 6.0, runSpacing: 6.0, children: [
+                ...(topics).map((topic) {
+                  return _buildChip(topic, Colors.black54);
+                }).toList(),
+              ]),
             ),
             Expanded(
               child: FutureBuilder<List<Subscribable>>(
