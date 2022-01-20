@@ -4,6 +4,7 @@ import 'package:totalrecalls/main.dart';
 import 'package:totalrecalls/providers/auth.dart';
 import 'package:totalrecalls/screen/login-screen.dart';
 import 'package:totalrecalls/screen/notificaitons-screen%20.dart';
+import 'package:totalrecalls/screen/register.dart';
 import 'package:totalrecalls/screen/subscribe-screen.dart';
 import 'package:totalrecalls/screen/add-subscription-screen.dart';
 
@@ -75,6 +76,15 @@ class NavDrawer extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) =>
                                 MyHomePage(title: 'TotalRecalls.io')));
+                  },
+                ),
+                ListTile(
+                  title: Text("Register"),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegisterScreen()));
                   },
                 ),
                 ListTile(

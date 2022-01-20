@@ -48,7 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _attemptAuthentication() async {
     final key = await storage.read(key: 'auth');
-    Provider.of<Auth>(context, listen: false).attempt(key!);
+    if (key != null) {
+      Provider.of<Auth>(context, listen: false).attempt(key);
+    }
   }
 
   @override
@@ -68,12 +70,10 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Consumer<Auth>(
           builder: (context, auth, child) {
             if (auth.authenticated) {
-              log("HERE AUTH");
               return WebView(
                 initialUrl: homeUrl,
               );
             } else {
-              log("HERE");
               return WebView(
                 initialUrl: homeUrl,
               );
