@@ -79,8 +79,6 @@ class Auth extends ChangeNotifier {
       ),
     );
 
-    log("delete token");
-
     await deleteToken();
 
     notifyListeners();

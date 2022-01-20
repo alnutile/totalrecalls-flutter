@@ -153,7 +153,7 @@ class AddSubscriptionState extends State<AddSubscriptionScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "Choose topics to watch for recalls",
+                "Choose topics to watch for Recalls",
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.black54,
