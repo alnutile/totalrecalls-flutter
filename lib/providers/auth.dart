@@ -6,6 +6,7 @@ import 'package:platform_device_id/platform_device_id.dart';
 import 'package:totalrecalls/models/user.dart';
 
 import 'package:dio/dio.dart' as Dio;
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import '../dio.dart';
@@ -31,6 +32,10 @@ class Auth extends ChangeNotifier {
     storeToken(token);
 
     notifyListeners();
+  }
+
+  deleteToken() async {
+    await storage.delete(key: "auth");
   }
 
   storeToken(String token) async {
@@ -64,8 +69,19 @@ class Auth extends ChangeNotifier {
     return deviceId;
   }
 
-  void logout() {
+  void logout() async {
     _authenticated = false;
+
+    await dio().delete(
+      "token",
+      options: Dio.Options(
+        headers: {'auth': true},
+      ),
+    );
+
+    log("delete token");
+
+    await deleteToken();
 
     notifyListeners();
   }

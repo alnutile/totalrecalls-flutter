@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'TotalRecalls.io',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.indigo,
       ),
       home: const MyHomePage(title: 'TotalRecalls.io'),
     );
@@ -41,6 +41,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final String homeUrl = "https://totalrecalls.io/";
+  //final String homeUrl = "https://solitary-morning.test";
+
   final storage = new FlutterSecureStorage();
 
   void _attemptAuthentication() async {
@@ -65,12 +68,14 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Consumer<Auth>(
           builder: (context, auth, child) {
             if (auth.authenticated) {
+              log("HERE AUTH");
               return WebView(
-                initialUrl: "https://totalrecalls.io",
+                initialUrl: homeUrl,
               );
             } else {
+              log("HERE");
               return WebView(
-                initialUrl: "https://totalrecalls.io",
+                initialUrl: homeUrl,
               );
             }
           },

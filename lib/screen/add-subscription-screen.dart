@@ -150,6 +150,17 @@ class AddSubscriptionState extends State<AddSubscriptionScreen> {
                 }).toList(),
               ]),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Choose topics to watch for recalls",
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
             Expanded(
               child: FutureBuilder<List<Subscribable>>(
                 future: getSubscibables(),
